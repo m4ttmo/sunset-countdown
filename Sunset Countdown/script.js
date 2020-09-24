@@ -1,26 +1,28 @@
 
-var x;
+var x = "23:05:55 PM"
 var lat;
 var lng;
 var timeNotice = document.getElementById("time");
 var sunOffset = 0;
+var diffTime;
 
 window.onload = function getLocation() {
+    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(logPosition);
-      } else {
+    } else {
         timeNotice.innerHTML = "Geolocation is not supported by this browser.";
-      }
+    }
 }
 
 function logPosition(position) {
     lat = position.coords.latitude
     lng = position.coords.longitude; 
     console.log(lat + " " + lng);
-    //sunSetTime();
-    test();
+    sunSetTime();
+    
 }
-/*function sunSetTime() {
+function sunSetTime() {
     fetch('https://api.sunrise-sunset.org/json?lat='+ lat + '&lng=' + lng).then(response => response.json())
     .then(data => {
         console.log(data)
@@ -28,12 +30,9 @@ function logPosition(position) {
         console.log(x);
         difCal();
     }).catch((err) => console.log(err));
-}*/
-function test() {
-    x = "23:05:55 PM";
-    difCal();
 }
-var timer = setInterval(function difCal() {
+
+function difCal() {
     
     x = x.slice(0, -3);
     const colPos = x.indexOf(":");
@@ -46,15 +45,18 @@ var timer = setInterval(function difCal() {
         x = x.slice(2, x.length);
         x = y + x;
     }
+    
+    
+}
+var timer = setInterval(function display() {
     var today = new Date().toString().split(" ").slice(0, 4).join(" ");
-    const parsedDate = new Date(today + " " + x);
-    let parsedDateTime = parsedDate.getTime();
-    let todayDateTime = new Date().getTime();
+    var parsedDate = new Date(today + " " + x);
+    var parsedDateTime = parsedDate.getTime();
+    var todayDateTime = new Date().getTime();
 
-    let diffTime = parsedDateTime - todayDateTime;
+    diffTime = parsedDateTime - todayDateTime;
 
     console.log(diffTime);
-
     if (diffTime <= 0) {
         
         timeNotice.innerHTML = "Sun has set, check back tomorrow"
@@ -70,7 +72,7 @@ var timer = setInterval(function difCal() {
         timeNotice.innerHTML = hours + ":" + minutes + ":" + seconds;
         document.getElementById("sun").style.top = sunOffset +"px";
     }
-},1000)
+}, 1000)
 
 
 
